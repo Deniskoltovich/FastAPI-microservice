@@ -3,6 +3,7 @@ services:
   fastapi:
     restart: unless-stopped
     build: .
+    image: "fastapi"
     ports:
       - "${APP_PORT}:8080"
     volumes:
@@ -18,6 +19,8 @@ services:
     image: mongo:latest
     ports:
       - "${MONGO_PORT}:27017"
+    env_file:
+      - .env
     volumes:
       - ./data:/data/db
 
@@ -30,6 +33,38 @@ services:
       - KAFKA_CREATE_TOPICS=${KAFKA_CREATE_TOPICS}
       - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
       - ALLOW_PLAINTEXT_LISTENER=${ALLOW_PLAINTEXT_LISTENER}
+
+  celery:
+    restart: unless-stopped
+    image: "fastapi"
+    entrypoint: /code/entrypoint_celery.sh
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      - fastapi
+      - redis
+
+  celery-beat:
+    restart: unless-stopped
+    image: 'fastapi'
+    entrypoint: /code/entrypoint_beat.sh
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      - fastapi
+      - redis
+      - celery
+
+  redis:
+    image: redis:alpine
+    command: redis-server --port ${REDIS_PORT}
+
+    ports:
+      - "${REDIS_PORT}:7777"
 
   zookeeper:
     image: wurstmeister/zookeeper:3.4.6
