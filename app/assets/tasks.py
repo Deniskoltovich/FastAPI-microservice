@@ -4,6 +4,8 @@ import time
 import httpx
 from celery.utils.log import get_task_logger
 
+from app.assets.repositories import AssetRepository
+from app.assets.services import AssetService
 from app.celery_app import celery_app
 from app.database import assets_collection
 
@@ -28,10 +30,4 @@ def parse_assets(collection: list[str]):
 
 @celery_app.task()
 def perform_upsert(document: dict):
-    filter = {'name': document["01. symbol"]}
-    document = {
-        'name': document["01. symbol"],
-        'current_price': document["05. price"],
-    }
-
-    assets_collection.update_one(filter, {'$set': document}, upsert=True)
+    AssetService(AssetRepository).update_asset_price(document)
