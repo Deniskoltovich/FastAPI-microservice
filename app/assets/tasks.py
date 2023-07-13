@@ -1,21 +1,21 @@
-import os
 import time
 
+import async_to_sync as sync
 import httpx
 from celery.utils.log import get_task_logger
 
 from app.assets.repositories import AssetRepository
 from app.assets.services import AssetService
 from app.celery_app import celery_app
-from app.database import assets_collection
+from config.config import settings
 
 logger = get_task_logger(__name__)
 
 
 @celery_app.task()
 def parse_assets(collection: list[str]):
-    api_key = os.environ.get('API_KEY')
-    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE'
+    api_key = settings.API_KEY
+    url = settings.ASSET_PARSING_URL
     for asset_symbol in collection:
         asset_url = f'{url}&symbol={asset_symbol}&apikey={api_key}'
         response = httpx.get(asset_url)
@@ -30,4 +30,6 @@ def parse_assets(collection: list[str]):
 
 @celery_app.task()
 def perform_upsert(document: dict):
-    AssetService(AssetRepository).update_asset_price(document)
+    sync.coroutine(
+        AssetService(AssetRepository()).update_asset_price_by_name(document)
+    )

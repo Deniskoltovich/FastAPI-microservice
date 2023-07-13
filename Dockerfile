@@ -14,9 +14,8 @@ COPY entrypoint.sh .
 COPY entrypoint_beat.sh .
 COPY entrypoint_celery.sh .
 
-RUN chmod +x entrypoint.sh
-RUN chmod +x entrypoint_beat.sh
-RUN chmod +x entrypoint_celery.sh
+RUN chmod +x entrypoint.sh entrypoint_beat.sh entrypoint_celery.sh
+
 
 RUN pipenv install --system
 COPY . /code

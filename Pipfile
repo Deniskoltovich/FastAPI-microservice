@@ -13,6 +13,9 @@ python-dotenv = "*"
 redis = "*"
 celery = "*"
 httpx = "*"
+aiokafka = "*"
+pydantic-settings = "*"
+async-to-sync = "*"
 
 [dev-packages]
 flake8 = "*"

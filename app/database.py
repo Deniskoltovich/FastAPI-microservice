@@ -2,9 +2,9 @@ import os
 
 import motor.motor_asyncio
 
-_mongodb = (
-    f'mongodb://{os.environ.get("MONGO_HOST")}:{os.environ.get("MONGO_PORT")}'
-)
+from config.config import settings
+
+_mongodb = settings.DATABASE_URL
 
 
 client = motor.motor_asyncio.AsyncIOMotorClient(_mongodb)
