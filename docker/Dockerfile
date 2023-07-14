@@ -10,11 +10,11 @@ WORKDIR /code
 RUN pip install pipenv
 COPY Pipfile .
 COPY Pipfile.lock .
-COPY entrypoint.sh .
-COPY entrypoint_beat.sh .
-COPY entrypoint_celery.sh .
+COPY scripts/entrypoint.sh .
+COPY scripts/entrypoint_beat.sh .
+COPY scripts/entrypoint_celery.sh .
 
-RUN chmod +x entrypoint.sh entrypoint_beat.sh entrypoint_celery.sh
+RUN chmod +x ./entrypoint.sh ./entrypoint_beat.sh ./entrypoint_celery.sh
 
 
 RUN pipenv install --system

@@ -1,4 +1,4 @@
-from app.assets.repositories import AssetRepository
+from app.repositories.asset import AssetRepository
 
 
 class AssetService:

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.assets.repositories import AssetRepository
 from app.assets.services import AssetService
+from app.repositories.asset import AssetRepository
 
 asset_router = APIRouter(prefix='/assets')
 

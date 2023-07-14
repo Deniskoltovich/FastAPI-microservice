@@ -2,46 +2,81 @@ version: "3.8"
 services:
   fastapi:
     restart: unless-stopped
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     image: "fastapi"
     ports:
       - "${APP_PORT}:8080"
     volumes:
-      - .:/code
+      - ..:/code
     depends_on:
       - mongo
       - kafka
-    entrypoint: /code/entrypoint.sh
+    entrypoint: /code/scripts/entrypoint.sh
+
     env_file:
+<<<<<<< Updated upstream:docker-compose.yaml
       - .env
+=======
+      - ../.env
+    networks:
+      - fastapi_kafka
+>>>>>>> Stashed changes:docker/docker-compose.yaml
 
   mongo:
     image: mongo:latest
     ports:
       - "${MONGO_PORT}:27017"
     env_file:
-      - .env
+      - ../.env
     volumes:
       - ./data:/data/db
+<<<<<<< Updated upstream:docker-compose.yaml
+=======
+    networks:
+      - fastapi_kafka
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    env_file:
+      - ../.env
+    expose:
+      - ${ZOOKEEPER_PORT}
+    ports:
+      - ${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}
+    networks:
+      - fastapi_kafka
+>>>>>>> Stashed changes:docker/docker-compose.yaml
 
   kafka:
     image: bitnami/kafka
     ports:
+<<<<<<< Updated upstream:docker-compose.yaml
       - "${KAFKA_PORT}:9092"
     environment:
       - KAFKA_ADVERTISED_HOST_NAME=${KAFKA_ADVERTISED_HOST_NAME}
       - KAFKA_CREATE_TOPICS=${KAFKA_CREATE_TOPICS}
       - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
       - ALLOW_PLAINTEXT_LISTENER=${ALLOW_PLAINTEXT_LISTENER}
+=======
+      - ${KAFKA_PORTS}:${KAFKA_PORTS}
+    env_file:
+      - ../.env
+    depends_on:
+      - zookeeper
+    networks:
+      - fastapi_kafka
+>>>>>>> Stashed changes:docker/docker-compose.yaml
 
   celery:
     restart: unless-stopped
     image: "fastapi"
-    entrypoint: /code/entrypoint_celery.sh
+    entrypoint: /code/scripts/entrypoint_celery.sh
     volumes:
-      - .:/code
+      - ..:/code
     env_file:
-      - ./.env
+      - ../.env
     depends_on:
       - fastapi
       - redis
@@ -49,11 +84,11 @@ services:
   celery-beat:
     restart: unless-stopped
     image: 'fastapi'
-    entrypoint: /code/entrypoint_beat.sh
+    entrypoint: /code/scripts/entrypoint_beat.sh
     volumes:
-      - .:/code
+      - ..:/code
     env_file:
-      - ./.env
+      - ../.env
     depends_on:
       - fastapi
       - redis

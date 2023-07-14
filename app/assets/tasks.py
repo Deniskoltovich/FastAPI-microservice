@@ -4,9 +4,9 @@ import async_to_sync as sync
 import httpx
 from celery.utils.log import get_task_logger
 
-from app.assets.repositories import AssetRepository
 from app.assets.services import AssetService
 from app.celery_app import celery_app
+from app.repositories.asset import AssetRepository
 from config.config import settings
 
 logger = get_task_logger(__name__)
