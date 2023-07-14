@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     MONGO_USER: str
     MONGO_PASSWORD: str
     MONGO_DB: str
+    BOOTSTRAP_SERVERS: str
 
     KAFKA_ADVERTISED_HOST_NAME: str
     KAFKA_BROKER_ID: int
