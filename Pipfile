@@ -16,6 +16,9 @@ httpx = "*"
 aiokafka = "*"
 pydantic-settings = "*"
 async-to-sync = "*"
+pytest = "*"
+pytest-asyncio = "*"
+mongomock-motor = "*"
 
 [dev-packages]
 flake8 = "*"
