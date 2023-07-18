@@ -1,3 +1,4 @@
+from app.producer import send_updated_asset_info
 from app.repositories.asset import AssetRepository
 
 
@@ -16,3 +17,4 @@ class AssetService:
         }
 
         await self.repository.upsert(filter_field, document)
+        await send_updated_asset_info(document)

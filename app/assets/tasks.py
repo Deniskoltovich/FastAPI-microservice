@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 import async_to_sync as sync
@@ -12,13 +13,20 @@ from config.config import settings
 logger = get_task_logger(__name__)
 
 
+async def get_response(url: str):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+    return response
+
+
 @celery_app.task()
 def parse_assets(collection: list[str]):
     api_key = settings.API_KEY
     url = settings.ASSET_PARSING_URL
     for asset_symbol in collection:
         asset_url = f'{url}&symbol={asset_symbol}&apikey={api_key}'
-        response = httpx.get(asset_url)
+        loop = asyncio.get_event_loop()
+        response = loop.run_until_complete(get_response(asset_url))
 
         if response.status_code == 200:
             document = response.json()
