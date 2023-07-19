@@ -3,6 +3,7 @@ import asyncio
 import pytest
 from mongomock_motor import AsyncMongoMockClient
 
+from app.assets.services import AssetService
 from app.repositories.asset import AssetRepository
 from app.repositories.base import BaseRepository
 
@@ -30,3 +31,9 @@ def asset_repo(collection):
 def base_repo(collection):
     base_repo = BaseRepository(collection)
     return base_repo
+
+
+@pytest.fixture()
+def service(asset_repo):
+    service = AssetService(asset_repo)
+    return service
