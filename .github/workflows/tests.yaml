@@ -21,11 +21,11 @@ jobs:
           echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Build Docker Containers
-        run:  docker-compose -f "docker-compose.yaml" up -d --build
+        run:  docker-compose -f "docker/docker-compose.yaml" up -d --build
 
       - name: Test
-        run: docker-compose -f "docker-compose.yaml" exec -T fastapi pytest
+        run: docker-compose -f "docker/docker-compose.yaml" exec -T fastapi pytest
 
       - name: Stop Containers
         if: always()
-        run: docker-compose -f "docker-compose.yaml" down
+        run: docker-compose -f "docker/docker-compose.yaml" down

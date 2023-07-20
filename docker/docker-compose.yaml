@@ -7,7 +7,7 @@ services:
       dockerfile: docker/Dockerfile
     image: "fastapi"
     ports:
-      - "${APP_PORT}:8080"
+      - "${APP_PORT:-8080}:8080"
     volumes:
       - ..:/code
     depends_on:
@@ -23,7 +23,7 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "${MONGO_PORT}:27017"
+      - "${MONGO_PORT:-27017}:27017"
     env_file:
       - ../.env
     volumes:
@@ -36,9 +36,9 @@ services:
     env_file:
       - ../.env
     expose:
-      - ${ZOOKEEPER_PORT}
+      - ${ZOOKEEPER_PORT:-22181}
     ports:
-      - ${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}
+      - ${ZOOKEEPER_PORT:-22181}:${ZOOKEEPER_PORT:-22181}
     networks:
       - fastapi_kafka
 
@@ -46,9 +46,9 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     expose:
-      - ${KAFKA_PORTS}
+      - ${KAFKA_PORTS:-29092}
     ports:
-      - ${KAFKA_PORTS}:${KAFKA_PORTS}
+      - ${KAFKA_PORTS:-29092}:${KAFKA_PORTS:-29092}
     env_file:
       - ../.env
     depends_on:
@@ -89,9 +89,9 @@ services:
 
   redis:
     image: redis:alpine
-    command: redis-server --port ${REDIS_PORT}
+    command: redis-server --port ${REDIS_PORT:-7777}
     ports:
-      - "${REDIS_PORT}:7777"
+      - "${REDIS_PORT:-7777}:7777"
     networks:
       - fastapi_kafka
 
