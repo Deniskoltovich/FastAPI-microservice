@@ -19,7 +19,9 @@ class TestAssetService:
         # Arrange
 
         document = {"01. symbol": "AAPL", "05. price": 100.0}
-        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+        mocker.patch(
+            "app.assets.services.send_updated_asset_info", return_value=None
+        )
 
         # Act
         await service.update_asset_price_by_name(document)
@@ -52,7 +54,9 @@ class TestAssetService:
     ):
         # Arrange
         document = {"01. symbol": "not exist", "05. price": 100.0}
-        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+        mocker.patch(
+            "app.assets.services.send_updated_asset_info", return_value=None
+        )
 
         # Act
         await service.update_asset_price_by_name(document)
@@ -76,7 +80,9 @@ class TestAssetService:
     ):
         # Arrange
         document = {"01. symbol": "AAPL", "05. price": 100.0}
-        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+        mocker.patch(
+            "app.assets.services.send_updated_asset_info", return_value=None
+        )
 
         # Act
         await service.update_asset_price_by_name(document)
