@@ -19,6 +19,7 @@ async-to-sync = "*"
 pytest = "*"
 pytest-asyncio = "*"
 mongomock-motor = "*"
+pytest-mock = "*"
 
 [dev-packages]
 flake8 = "*"

@@ -14,11 +14,13 @@ class TestAssetService:
     #  Tests that the update_asset_price_by_name method updates asset price and sends updated info
     @pytest.mark.asyncio
     async def test_update_asset_price_by_name_updates_asset_price_and_sends_updated_info(
-        self, service
+        self, service, mocker
     ):
         # Arrange
 
         document = {"01. symbol": "AAPL", "05. price": 100.0}
+        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+
         # Act
         await service.update_asset_price_by_name(document)
         assets = await service.get_assets()
@@ -46,10 +48,12 @@ class TestAssetService:
 
     @pytest.mark.asyncio
     async def test_update_asset_price_by_name_insert_asset_when_filter_field_dont_match_any(
-        self, service, asset_repo
+        self, service, asset_repo, mocker
     ):
         # Arrange
         document = {"01. symbol": "not exist", "05. price": 100.0}
+        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+
         # Act
         await service.update_asset_price_by_name(document)
         asset = await asset_repo.get_by_name(document.get('01. symbol'))
@@ -68,10 +72,12 @@ class TestAssetService:
     #  Tests that the update_asset_price_by_name method sends correct message format
     @pytest.mark.asyncio
     async def test_update_asset_price_by_name_sends_correct_message_format(
-        self, service, asset_repo
+        self, service, asset_repo, mocker
     ):
         # Arrange
         document = {"01. symbol": "AAPL", "05. price": 100.0}
+        mocker.patch("app.producer.send_updated_asset_info", return_value=None)
+
         # Act
         await service.update_asset_price_by_name(document)
         asset = await asset_repo.get_by_name(document["01. symbol"])
