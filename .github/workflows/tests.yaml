@@ -20,6 +20,8 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
+      - name: Create network
+        run: docker network create fastapi_kafka
       - name: Build Docker Containers
         run:  docker-compose -f "docker/docker-compose.yaml" up -d --build
 
