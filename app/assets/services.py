@@ -1,5 +1,6 @@
 from app.producer import send_updated_asset_info
 from app.repositories.asset import AssetRepository
+from config.config import settings
 
 
 class AssetService:
@@ -10,10 +11,10 @@ class AssetService:
         return await self.repository.get_assets()
 
     async def update_asset_price_by_name(self, document: dict) -> None:
-        filter_field = {'name': document["01. symbol"]}
+        filter_field = {'name': document[settings.API_RESPONSE_NAME_FIELD]}
         document = {
-            'name': document["01. symbol"],
-            'current_price': document["05. price"],
+            'name': document[settings.API_RESPONSE_NAME_FIELD],
+            'current_price': document[settings.API_RESPONSE_PRICE_FIELD],
         }
 
         await self.repository.upsert(filter_field, document)
