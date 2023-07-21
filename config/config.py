@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     APP_HOST: str
     APP_PORT: int
     API_KEY: str
+    API_RESPONSE_NAME_FIELD: str
+    API_RESPONSE_PRICE_FIELD: str
     ASSET_PARSING_URL: str
 
     BROKER_REDIS_URL: str
