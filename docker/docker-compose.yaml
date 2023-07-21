@@ -89,9 +89,9 @@ services:
 
   redis:
     image: redis:alpine
-    command: redis-server --port ${REDIS_PORT:-7777}
+    command: redis-server --port ${REDIS_PORT:-7707}
     ports:
-      - "${REDIS_PORT:-7777}:7777"
+      - "${REDIS_PORT:-7707}:7777"
     networks:
       - fastapi_kafka
 
