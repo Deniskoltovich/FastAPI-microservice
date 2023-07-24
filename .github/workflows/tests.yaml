@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Create network
+        run: docker network create fastapi_kafka
+      - name: Build Docker Containers
+        run:  docker-compose -f "docker/docker-compose.yaml" up -d --build
+
+      - name: Test
+        run: docker-compose -f "docker/docker-compose.yaml" exec -T fastapi pytest
+
+      - name: Stop Containers
+        if: always()
+        run: docker-compose -f "docker/docker-compose.yaml" down
